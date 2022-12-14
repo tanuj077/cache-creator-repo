@@ -27,8 +27,8 @@ jobs:
         id: cache-save
         with:
           path: ${{ github.workspace }}/node_modules
-          key: ${{ steps.cache-restore.outputs.cache-primary-key }}-bugbash
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}-retry-for-matched-key
       - name: Get Outputs
         run: | 
             echo "${{ steps.cache-restore.outputs.cache-primary-key }}"
-            echo "${{ steps.cache-restore.outputs.cache-restore-key }}"
+            echo "${{ steps.cache-restore.outputs.cache-matched-key }}"
