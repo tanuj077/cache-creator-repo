@@ -1,20 +1,15 @@
-name: Restore-Save
+name: npm-cache-restore-save
 on:
   push:
     branches:
     - main
-
 jobs:
   build:
     name: Build Test
     runs-on: ubuntu-latest
     steps:
-      - name: Get current date
-        shell: bash
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - uses: actions/checkout@v2
-      - uses: actions/cache/restore@kotewar/granular-ga
+      - uses: actions/cache/restore@v3
         id: cache-restore
         with:
           path: ${{ github.workspace }}/node_modules
@@ -27,8 +22,8 @@ jobs:
         run: |
           pwd
           npm install
-      - uses: actions/cache/save@kotewar/granular-ga
-        if: ${{ contains(steps.cache-restore.outputs.cache-primary-key, '-beta-node-') }}
+      - uses: actions/cache/save@v3
+        if: ${{ steps.cache-restore.outputs.cache-primary-key == steps.cache-restore.outputs.cache-matched-key }}
         id: cache-save
         with:
           path: ${{ github.workspace }}/node_modules
