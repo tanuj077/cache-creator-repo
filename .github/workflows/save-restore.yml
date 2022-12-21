@@ -15,12 +15,12 @@ jobs:
       - uses: actions/cache/save@v3
         id: cache-save
         with:
-          path: ${{ github.workspace }}/node_modules
+          path: ${{ github.workspace }}/node
           key: ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
       - uses: actions/cache/restore@v3
         id: cache-restore
         with:
-          path: ${{ github.workspace }}/node_modules
+          path: ${{ github.workspace }}/node
           key: ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}
