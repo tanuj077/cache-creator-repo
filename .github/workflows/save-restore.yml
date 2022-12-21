@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: NPM install
+        shell: bash
+        run: |
+          pwd
+          npm install
       - uses: actions/cache/save@v3
         id: cache-save
         with:
