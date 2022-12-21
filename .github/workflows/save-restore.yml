@@ -22,6 +22,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}
             ${{ runner.os }}-beta-node-
+      - name: Fail if cache not found
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache not found"
+          exit 1
       - name: NPM install
         shell: bash
         run: |
