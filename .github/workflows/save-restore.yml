@@ -23,7 +23,7 @@ jobs:
           pwd
           npm install
       - uses: actions/cache/save@v3
-        if: ${{ steps.cache-restore.outputs.cache-primary-key == steps.cache-restore.outputs.cache-matched-key }}
+        if: ${{ steps.cache-restore.outputs.cache-primary-key }} != ${{ steps.cache-restore.outputs.cache-matched-key }}
         id: cache-save
         with:
           path: ${{ github.workspace }}/node_modules
