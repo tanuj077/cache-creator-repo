@@ -11,7 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: NPM install
-        shell: bash
         run: npm install
         working-directory: ./node
       - uses: actions/cache/save@v3
