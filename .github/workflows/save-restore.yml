@@ -1,4 +1,4 @@
-name: Restore-Save
+name: npm-cache-save-restore
 on:
   push:
     branches:
@@ -9,11 +9,12 @@ jobs:
     name: Build Test
     runs-on: ubuntu-latest
     steps:
-      - name: Get current date
-        shell: bash
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - uses: actions/checkout@v2
+      - uses: actions/cache/save@v3
+        id: cache-save
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
       - uses: actions/cache/restore@v3
         id: cache-restore
         with:
@@ -22,14 +23,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}
             ${{ runner.os }}-beta-node-
-      - name: NPM install
-        shell: bash
+      - name: Fail if cache not found
+        if: steps.cache-restore.outputs.cache-hit != 'true'
         run: |
-          pwd
-          npm install
-      - uses: actions/cache/save@v3
-        if: ${{ steps.cache-restore.outputs.cache-primary-key != steps.cache-restore.outputs.cache-matched-key }}
-        id: cache-save
-        with:
-          path: ${{ github.workspace }}/node_modules
-          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
+          echo "Cache miss occurred, hence throwing error."
+          exit 1
