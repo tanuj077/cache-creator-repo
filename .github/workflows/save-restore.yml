@@ -14,7 +14,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - uses: actions/checkout@v2
-      - uses: actions/cache/restore@v3.2.0-beta.1
+      - uses: actions/cache/restore@kotewar/granular-ga
         id: cache-restore
         with:
           path: ${{ github.workspace }}/node_modules
@@ -22,23 +22,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}
             ${{ runner.os }}-beta-node-
-      - name: Fail if cache not found
-        if: steps.cache-restore.outputs.cache-hit != 'true'
-        run: |
-          echo "Cache not found"
-          exit 1
       - name: NPM install
         shell: bash
         run: |
           pwd
           npm install
-      - uses: actions/cache/save@v3.2.0-beta.1
+      - uses: actions/cache/save@kotewar/granular-ga
         if: ${{ contains(steps.cache-restore.outputs.cache-primary-key, '-beta-node-') }}
         id: cache-save
         with:
           path: ${{ github.workspace }}/node_modules
           key: ${{ steps.cache-restore.outputs.cache-primary-key }}-save-from-key
-      - name: Get Outputs
-        run: | 
-            echo "cache-primary-key: ${{ steps.cache-restore.outputs.cache-primary-key }}"
-            echo "cache-matched-key: ${{ steps.cache-restore.outputs.cache-matched-key }}"
