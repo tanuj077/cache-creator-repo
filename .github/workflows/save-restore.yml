@@ -1,33 +1,45 @@
-name: Save and restore
+name: Restore-Save
 on:
   push:
-  workflow_dispatch:
+    branches:
+    - main
+    paths:
+    - 'toolsets/**'
+    - 'node/**'
+    - 'lab/**'
 
 jobs:
   build:
     name: Build Test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Get current date
         shell: bash
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - uses: actions/checkout@v2
-      - uses: actions/cache/restore@700-actionscache-granular-cache-control
+      - uses: actions/cache/restore@v3.2.0-beta.1
         id: cache-restore
         with:
           path: ${{ github.workspace }}/node_modules
-          key: cache-key
+          key: ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-beta-node-${{ hashFiles('**/package-lock.json') }}
+            ${{ runner.os }}-beta-node-
       - name: NPM install
         shell: bash
         run: |
           pwd
           npm install
-      - uses: actions/cache/save@700-actionscache-granular-cache-control
+      - uses: actions/cache/save@v3.2.0-beta.1
+        if: ${{ contains(steps.cache-restore.outputs.cache-primary-key, '-beta-node-') }}
         id: cache-save
         with:
           path: ${{ github.workspace }}/node_modules
-          key: ${{ steps.cache-restore.outputs.cache-primary-key }}-retry-for-matched-key
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}-save-from-key
       - name: Get Outputs
         run: | 
             echo "cache-primary-key: ${{ steps.cache-restore.outputs.cache-primary-key }}"
