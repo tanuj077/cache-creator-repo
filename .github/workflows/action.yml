@@ -18,10 +18,6 @@ jobs:
         path: ${{ github.workspace }}/node_modules
         key: zxcv
         restore-keys: cache-key-
-    - name: NPM install
-      run: |
-        pwd
-        npm install
     
     - name: Cache CLI tools managed by Mint
       uses: actions/cache@v3
