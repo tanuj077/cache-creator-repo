@@ -22,3 +22,11 @@ jobs:
       run: |
         pwd
         npm install
+    
+    - name: Cache CLI tools managed by Mint
+      uses: actions/cache@v3
+      with:
+        path: .mint
+        key: ${{ runner.os }}-mint-${{ hashFiles('**/Mintfile') }}
+        restore-keys: |
+          ${{ runner.os }}-mint-
