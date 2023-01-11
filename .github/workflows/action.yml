@@ -12,7 +12,7 @@ jobs:
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
     - uses: actions/checkout@v2
-    - uses: actions/cache@kotewar/granular-ga
+    - uses: actions/cache@v3
       id: cache
       with:
         path: ${{ github.workspace }}/node_modules
