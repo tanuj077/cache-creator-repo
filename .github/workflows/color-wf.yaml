@@ -17,14 +17,14 @@ jobs:
         run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
       - name: Get color
         run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-            echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-      - name: pip cache
-        uses: actions/cache@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-             ${{ runner.os }}-pip-
+          node-version: 16
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
