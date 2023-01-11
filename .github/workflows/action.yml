@@ -18,11 +18,11 @@ jobs:
         path: ${{ github.workspace }}/node_modules
         key: zxcv
         restore-keys: cache-key-
-    
-    - name: Cache CLI tools managed by Mint
-      uses: actions/cache@v3
-      with:
-        path: .mint
-        key: ${{ runner.os }}-mint-${{ hashFiles('**/Mintfile') }}
-        restore-keys: |
-          ${{ runner.os }}-mint-
+    - name: NPM install
+      run: |
+        pwd
+        npm install
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
