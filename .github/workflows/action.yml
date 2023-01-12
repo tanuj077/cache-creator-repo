@@ -8,20 +8,20 @@ jobs:
     name: Build Test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v3
-      id: cache
-      with:
-        path: ${{ github.workspace }}/node_modules
-        key: zxcv
-        restore-keys: cache-key-
-    - name: NPM install
-      run: |
-        pwd
-        npm install
-    - name: Get npm cache directory
-      id: npm-cache-dir
-      shell: bash
-      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
-    - name: Print Cache Directory
-      run: echo "npm cache directory is {{ steps.npm-cache-dir.outputs.dir }}"
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: zxcv
+          restore-keys: cache-key-
+      - name: NPM install
+        run: |
+          pwd
+          npm install
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - name: Print Cache Directory
+        run: echo "npm cache directory is {{ steps.npm-cache-dir.outputs.dir }}"
