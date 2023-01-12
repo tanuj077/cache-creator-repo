@@ -23,3 +23,5 @@ jobs:
       id: npm-cache-dir
       shell: bash
       run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+    - name: Print Cache Directory
+      run: echo "npm cache directory is {{ steps.npm-cache-dir.outputs.dir }}"
